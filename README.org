@@ -17,9 +17,9 @@ For the sake of simplicity and pedagogical purpose, we'r using arduino
 framework instead of the naked AVR lib, if limitation began to arise,
 we'll feel free to switch.
 
-But, ardiuino IDE is a real shit for anyone loving to code and the
-lake of integrated CLI compile-chain make it necessary for us to use
-the CLI part of platformIO (and emacs as an OS).
+But, arduino IDE is a real shit for anyone loving to code and the lake
+of integrated CLI compile-chain make it necessary for us to use the
+CLI part of platformIO (and emacs as an OS).
 
 once this intalled compiling and flashing the fireware should be as
 easy as :
