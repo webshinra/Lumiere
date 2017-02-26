@@ -5,7 +5,7 @@ This code is a firmware for a smart light system called Lumière
 provide a relative agnosticism from the physical implementation.
 
 Given the overkill computing power given by modern µ-controllers and
-the respective order of magnitude of electrical consumoption between
+the respective order of magnitude of electrical consumption between
 the «power stage» and the «command stage» of the system, we can
 neglect low-level (and non-interoperable) optimisation strategy.
 
