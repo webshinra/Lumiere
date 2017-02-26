@@ -47,10 +47,10 @@ of the author need, which is this case :
    (ie: grow-light for plants can't be driven exactly like warm-white
    light for human).
 
- - The overall cost should be minimal but we limited to physical
-   interface (switch, galvanometers & co.), the electronical part will
-   be composed from standard (ie: with lot of equivalent ) part easely
-   found on the actual and future market.
+ - The overall cost should be minimal but we limited hacking and
+   recycling to physical interface (switch, galvanometers & co.), the
+   electronical part will be composed from standard (ie: with lot of
+   equivalent ) part easely found on the actual and future market.
 
  - Control interface should be electro-mecanical (physical switchs…),
    it's vintage, can last years and be recycled easily. To allow the
