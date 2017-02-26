@@ -1,0 +1,65 @@
+* About Lumière
+
+This code is a firmware for a smart light system called Lumière
+(meaning «Light» in french). The underlaying design goals are to
+provide a relative agnosticism from the physical implementation.
+
+Given the overkill computing power given by modern µ-controllers and
+the respective order of magnitude of electrical consumoption between
+the «power stage» and the «command stage» of the system, we can
+neglect low-level (and non-interoperable) optimisation strategy.
+
+This code rely on c++11 capabilities to provide compilation-time
+checking and computation, especially througt template metaprogramming
+and generalised constant expressions.
+
+For the sake of simplicity and pedagogical purpose, we'r using arduino
+framework instead of the naked AVR lib, if limitation began to arise,
+we'll feel free to switch. 
+
+* Copying constraint
+
+Please keep in mind that while it is legal to seel system based on the
+fireware, your only obligations are those of the GPLV3: give the same
+right to your customers your where given here.
+
+* Practical goals
+
+Lumière is built on an simple electronical structure with modularity
+in mind.
+
+As many libre software, this system is designed at first to cover one
+of the author need, which is this case :
+
+ - Live in a underground studio with only a 50/25cm window for 27m²
+   divided in two room.
+
+ - Want to keep a circadian-cycle compatible with social life and
+   matching with the sun (ie: daylight are shorter in winter and the
+   overall spectrum is shift by atmopheric scatering (and quantic
+   effect) due to declinaison).
+
+ - Want the system to be independant from computer, network connection
+   and able to work on batteries (and aware of the power-source
+   switching).
+
+ - Want to handle multiple light channel, with independant semantic
+   (ie: grow-light for plants can't be driven exactly like warm-white
+   light for human).
+
+ - The overall cost should be minimal but we limited to physical
+   interface (switch, galvanometers & co.), the electronical part will
+   be composed from standard (ie: with lot of equivalent ) part easely
+   found on the actual and future market.
+
+ - Control interface should be electro-mecanical (physical switchs…),
+   it's vintage, can last years and be recycled easily. To allow the
+   system to be hackable, the interface component should be easy to
+   plug into the code.
+
+in the hope that it will be useful.
+
+
+Librement, 
+
+    Yann Asset
