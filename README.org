@@ -27,11 +27,34 @@ easy as :
     platformio run -t upload
 
 
+
 * Copying constraint
 
 Please keep in mind that while it is legal to seel system based on the
 fireware, your only obligations are those of the GPLV3: give the same
 right to your customers your where given here.
+
+* Physical implementation
+
+  The actual physical system which is running this code consist of :
+
+  - An arduino mega compatible-board (a chinese copy, in this case).
+ 
+  - A power-stage constitued of a 12v led-strip power-source (probably
+    recycled by the maker from a laptop power) and SMC MOSFET
+    (AMP3055L TO-252 N Channel MOSFET) dimentioned (paralellized or
+    not) accordignly to every chanel it had to drive.
+  
+  - led strips :
+    - Warm light
+    - Red
+    - Green
+    - Blue
+    - Grow (optimized spectrum with no green and low blue)
+
+I don't have any global schematic for the system as its simplicity
+allow it to be built from the top of (y)our head; if you think
+otherwise, ask for it and I'll try to draw one.
 
 * Practical goals
 
@@ -66,6 +89,7 @@ of the author need, which is this case :
    it's vintage, can last years and be recycled easily. To allow the
    system to be hackable, the interface component should be easy to
    plug into the code.
+
 
 in the hope that it will be useful.
 
