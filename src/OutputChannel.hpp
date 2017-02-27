@@ -17,23 +17,15 @@
 
 #pragma once
 
-#include <stdint.h>
-
-#include "AnalogOutputChannel.hpp"
-
 namespace Lumiere
 {
-  template <uint8_t Pin,
-            int     Power> 
-  struct LightChannel:
-    public AnalogOutputChannel<Pin> 
+  template<uint8_t Pin>
+  struct OutputChannel:
+    public Channel
   {
-    LightChannel():
-      AnalogOutputChannel<Pin>(),
-      mIntensity(0)
-    { }
-
-  private:
-    float mIntensity; 
+    OutputChannel()
+    {
+      pinMode(Pin, OUTPUT);
+    } 
   }; 
 }

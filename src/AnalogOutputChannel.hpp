@@ -11,29 +11,23 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
   
-  You should have received a copy of the GNU General Public License
+  You should have received a copy of the GNU  General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
 
-#include <stdint.h>
-
-#include "AnalogOutputChannel.hpp"
+#include "Channel.hpp"
 
 namespace Lumiere
 {
-  template <uint8_t Pin,
-            int     Power> 
-  struct LightChannel:
-    public AnalogOutputChannel<Pin> 
+  template <uint8_t Pin>
+  struct AnalogOutputChannel:
+    public Channel
   {
-    LightChannel():
-      AnalogOutputChannel<Pin>(),
-      mIntensity(0)
-    { }
-
-  private:
-    float mIntensity; 
-  }; 
+    virtual
+    void
+    sync() override
+    { } 
+  };
 }
