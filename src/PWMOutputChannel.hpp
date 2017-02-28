@@ -22,12 +22,26 @@
 namespace Lumiere
 {
   template <uint8_t Pin>
-  struct AnalogOutputChannel:
+  struct PWMOutputChannel:
     public Channel
   {
+
+    PWMOutputChannel():
+      Channel(),
+      mValue(0)
+    { sync(); }
+    
     virtual
     void
     sync() override
-    { } 
+    { analogWrite(Pin,
+                  static_cast<uint8_t>(255.0/mValue)); }
+
+    void
+    setOutput(float pulseRatio)
+    { mValue = pulseRatio; }
+    
+  private:
+    float mValue; 
   };
 }

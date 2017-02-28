@@ -26,5 +26,19 @@ setup()
 void
 loop()
 {
-  Lumiere::LightChannel<3, 1000> redChannel;
+  Lumiere::LightChannel<2,  1000> redWallChannel;
+  Lumiere::LightChannel<3,  1000> greenWallChannel;
+  Lumiere::LightChannel<4,  1000> blueWallChannel;
+  Lumiere::LightChannel<5,  1000> growWallChannel;
+    
+  Lumiere::LightChannel<10, 1000> redCeilingChannel;
+  Lumiere::LightChannel<8,  1000> greenCeilingChannel;
+  Lumiere::LightChannel<9,  1000> blueCeilingChannel;
+  Lumiere::LightChannel<6,  1000> whiteCeilingChannel;
+
+  redWallChannel.setOutPower(100); 
+  redWallChannel.sync();
+
+  while(true)
+    { } 
 }

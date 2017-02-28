@@ -19,20 +19,24 @@
 
 #include <stdint.h>
 
-#include "AnalogOutputChannel.hpp"
+#include "PWMOutputChannel.hpp"
 
 namespace Lumiere
 {
   template <uint8_t Pin,
-            int     Power> 
+            int     Power>
   struct LightChannel:
-    public AnalogOutputChannel<Pin> 
+    public PWMOutputChannel<Pin> 
   {
     LightChannel():
-      AnalogOutputChannel<Pin>(),
+      PWMOutputChannel<Pin>(),
       mIntensity(0)
     { }
 
+    void
+    setOutPower(int power)
+    { this->setOutput(static_cast<float>(power) / static_cast<float>(Power)); } 
+    
   private:
     float mIntensity; 
   }; 
