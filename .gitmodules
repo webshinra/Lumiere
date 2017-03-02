@@ -1,0 +1,12 @@
+[submodule "lib/stl"]
+	path = lib/stl
+	url = https://github.com/maniacbug/StandardCplusplus.git
+[submodule "lib/RTCLib"]
+	path = lib/RTCLib
+	url = https://github.com/geekfactory/RTCLib.git
+[submodule "lib/Time"]
+	path = lib/Time
+	url = https://github.com/PaulStoffregen/Time.git
+[submodule "lib/RTClib"]
+	path = lib/RTClib
+	url = https://github.com/adafruit/RTClib.git

@@ -11,40 +11,25 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
   
-  You should have received a copy of the GNU  General Public License
+  You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
 
-#include "Channel.hpp"
-
 namespace Lumiere
 {
-  template <uint8_t Pin>
-  struct PWMOutputChannel:
-    public Channel
+  template <typename ChannelType>
+  void
+  stromboscope(ChannelType* channel)
   {
+    channel->setOutPower(1000);
 
-    PWMOutputChannel():
-      Channel(),
-      mValue(0)
-    { sync(); }
-    
-    virtual
-    void
-    sync() override
-    { analogWrite(Pin,
-                  static_cast<uint8_t>(255.0*mValue)); }
+    delay(30);
 
-    void
-    setOutput(float pulseRatio)
-    {
-      mValue = pulseRatio;
-      sync();
-    }
+    channel->setOutPower(0);
     
-  private:
-    float mValue; 
-  };
+    delay(100);
+  }
+  
 }

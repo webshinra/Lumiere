@@ -11,40 +11,48 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
   
-  You should have received a copy of the GNU  General Public License
+  You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
 
-#include "Channel.hpp"
+#include "Color.hpp"
 
 namespace Lumiere
 {
-  template <uint8_t Pin>
-  struct PWMOutputChannel:
-    public Channel
-  {
-
-    PWMOutputChannel():
-      Channel(),
-      mValue(0)
-    { sync(); }
-    
-    virtual
-    void
-    sync() override
-    { analogWrite(Pin,
-                  static_cast<uint8_t>(255.0*mValue)); }
-
-    void
-    setOutput(float pulseRatio)
+  enum class
+  InterpolationMode
     {
-      mValue = pulseRatio;
-      sync();
-    }
+     LINEAR_OVER_TIME,
+     LOG_OVER_TIME,
+     CONSTANT
+    };
+  
+  struct RVBWChannelDriver
+  {
+    RVBWChannelDriver():
+      mOriginColor {0,0,0},
+      mTargetColor {0,0,0},
+      mActualColor {0,0,0},
+      mMode(InterpolationMode::LINEAR_OVER_TIME)
+    { }
+    
+    void
+    sync()
+    { }
+
+    bool
+    interpolationConverged()
+    {
+      return (mActualColor == mTargetColor); 
+    } 
     
   private:
-    float mValue; 
+    Color mOriginColor;
+    Color mTargetColor;
+    Color mActualColor;
+    
+    InterpolationMode mMode; 
   };
 }

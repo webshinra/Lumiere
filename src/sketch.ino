@@ -14,13 +14,36 @@
   You should have received a copy of the GNU  General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include <Wire.h>
+#include <RTClib.h>
 
 #include "LightChannel.hpp"
+#include "RVBWChannelDriver.hpp"
 
-// Useless crap.
+#include "modes.hpp"
+
+RTC_DS3231 rtc;
+
 void
 setup()
-{ }
+{
+  // Should probably be avoided, as most effects will work without
+  // rtc.
+  if (! rtc.begin())
+    {
+      Serial.println("Couldn't find RTC");
+      while (true);
+    }
+
+  if (rtc.lostPower())
+    {
+      Serial.println("RTC lost power, lets set the time!");
+      // Set the RTC to the date & time this program was compiled.  As
+      // platformio compile & update in the same «move», it allow to
+      // set it with a suffisant precision for our usecase. 
+      rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    }
+}
 
  
 void
@@ -34,11 +57,18 @@ loop()
   Lumiere::LightChannel<10, 1000> redCeilingChannel;
   Lumiere::LightChannel<8,  1000> greenCeilingChannel;
   Lumiere::LightChannel<9,  1000> blueCeilingChannel;
-  Lumiere::LightChannel<6,  1000> whiteCeilingChannel;
+  Lumiere::LightChannel<6,  1000> whiteCeilingChannel;    
+  
+  growWallChannel.setOutPower(1000);
+  whiteCeilingChannel.setOutPower(700);
+  redCeilingChannel.setOutPower(10);
+  greenCeilingChannel.setOutPower(10);
+  blueCeilingChannel.setOutPower(100);
 
-  redWallChannel.setOutPower(100); 
-  redWallChannel.sync();
-
+  Lumiere::RVBWChannelDriver ceiling;
+  while(!ceiling.interpolationConverged())
+    ceiling.sync();
   while(true)
-    { } 
+    {
+    } 
 }
