@@ -28,30 +28,88 @@ namespace Lumiere
      LOG_OVER_TIME,
      CONSTANT
     };
-  
+
+  template <typename RedChannel,
+            typename GreenChannel,
+            typename BlueChannel,
+            typename WhiteChannel>
   struct RVBWChannelDriver
   {
-    RVBWChannelDriver():
-      mOriginColor {0,0,0},
-      mTargetColor {0,0,0},
-      mActualColor {0,0,0},
+    RVBWChannelDriver(Color initialColor={0,0,0,0}):
+      mOriginColor (initialColor),
+      mTargetColor (initialColor),
+      mActualColor (initialColor),
       mMode(InterpolationMode::LINEAR_OVER_TIME)
     { }
     
     void
-    sync()
-    { }
+    sync(long delaySinceLastFrame)
+    {
+      if (mConvergenceCursor < mConvergenceDelay)
+        mConvergenceCursor += delaySinceLastFrame;
+
+      if(mConvergenceDelay > 0)
+        {
+          
+          float progress
+          = (float)mConvergenceCursor
+          / (float)mConvergenceDelay;
+
+          
+          setColor(Color{mOriginColor.red +
+                         ((mTargetColor.red - mOriginColor.red) *progress),
+                         mOriginColor.green
+                         + ((mTargetColor.green - mOriginColor.green) *progress),
+                         mOriginColor.blue
+                         + ((mTargetColor.blue - mOriginColor.blue) *progress),
+                         mOriginColor.white
+                         + ((mTargetColor.white - mOriginColor.white) *progress)});
+        }
+      else
+        setColor(mTargetColor);
+      
+    }
+    
 
     bool
     interpolationConverged()
     {
-      return (mActualColor == mTargetColor); 
+      return (mConvergenceCursor >= mConvergenceDelay); 
     } 
+
+    void
+    setTarget(Color newTarget,
+              long interpolationConvergenceDelay)
+    {
+      mTargetColor = newTarget;
+      mOriginColor = mActualColor; 
+      mConvergenceDelay = interpolationConvergenceDelay; 
+      mConvergenceCursor = 0; 
+    }
+
+    // should not be called from outside before interpolation convergence
+    void
+    setColor(Color newActual)
+    {
+      r.setOutPower(1000*newActual.red);
+      g.setOutPower(1000*newActual.green); 
+      b.setOutPower(1000*newActual.blue); 
+      w.setOutPower(1000*newActual.white);
+      mActualColor=newActual; 
+    }
+    
+    RedChannel   r;
+    GreenChannel g;
+    BlueChannel  b;
+    WhiteChannel w;
     
   private:
     Color mOriginColor;
     Color mTargetColor;
     Color mActualColor;
+    
+    long mConvergenceDelay;
+    long mConvergenceCursor; 
     
     InterpolationMode mMode; 
   };

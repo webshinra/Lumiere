@@ -16,9 +16,15 @@
 */
 #include <Wire.h>
 #include <RTClib.h>
+//#include <BigNumber.h>
+
 
 #include "LightChannel.hpp"
 #include "RVBWChannelDriver.hpp"
+
+#include "Color.hpp"
+
+//#include "solar.hpp"
 
 #include "modes.hpp"
 
@@ -27,6 +33,9 @@ RTC_DS3231 rtc;
 void
 setup()
 {
+  Serial.begin(9600);
+  delay(3000); // wait for console opening
+  
   // Should probably be avoided, as most effects will work without
   // rtc.
   if (! rtc.begin())
@@ -43,32 +52,48 @@ setup()
       // set it with a suffisant precision for our usecase. 
       rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     }
+  
+  // BigNumber::begin(50);
 }
 
  
 void
 loop()
 {
-  Lumiere::LightChannel<2,  1000> redWallChannel;
-  Lumiere::LightChannel<3,  1000> greenWallChannel;
-  Lumiere::LightChannel<4,  1000> blueWallChannel;
-  Lumiere::LightChannel<5,  1000> growWallChannel;
-    
-  Lumiere::LightChannel<10, 1000> redCeilingChannel;
-  Lumiere::LightChannel<8,  1000> greenCeilingChannel;
-  Lumiere::LightChannel<9,  1000> blueCeilingChannel;
-  Lumiere::LightChannel<6,  1000> whiteCeilingChannel;    
-  
-  growWallChannel.setOutPower(1000);
-  whiteCeilingChannel.setOutPower(700);
-  redCeilingChannel.setOutPower(10);
-  greenCeilingChannel.setOutPower(10);
-  blueCeilingChannel.setOutPower(100);
 
-  Lumiere::RVBWChannelDriver ceiling;
-  while(!ceiling.interpolationConverged())
-    ceiling.sync();
+  //night
+  //  greenWallChannel.setOutPower(100);
+  // blueCeilingChannel.setOutPower(10);
+
+
+  //blueCeilingChannel.setOutPower(10);
+  //redCeilingChannel.setOutPower(10);
+  //greenCeilingChannel.setOutPower(10);
+  Lumiere::RVBWChannelDriver<Lumiere::LightChannel<2,  1000>,
+                             Lumiere::LightChannel<3,  1000>,
+                             Lumiere::LightChannel<4,  1000>,
+                             Lumiere::LightChannel<5,  1000>> wall;
+  
+  Lumiere::RVBWChannelDriver<Lumiere::LightChannel<10, 1000>,
+                             Lumiere::LightChannel<8,  1000>,
+                             Lumiere::LightChannel<9,  1000>,
+                             Lumiere::LightChannel<6,  1000>> ceiling; 
+  
+  //growWallChannel.setOutPower(1000);
+  //whiteCeilingChannel.setOutPower(1000);
+  randomSeed(43);
+      
   while(true)
     {
-    } 
+      torche(Lumiere::CeilingVariant{}, &ceiling);
+      torche(Lumiere::WallVariant{}, &wall);
+    }
+  
+  /*DateTime now = rtc.now();
+    auto t = now.unixtime();
+          Serial.print(static_cast<double>(t));
+          Serial.print(" ");*/
+        //Serial.println(solar_elevation(static_cast<double>(t),
+        //48.564396,
+        //2.6063036))
 }

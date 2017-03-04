@@ -19,20 +19,7 @@
 
 namespace Lumiere
 {
-  struct Color
-  {
-    float red;
-    float green;
-    float blue;
-    float white;
-
-    bool
-    operator==(Color const otherColor) const
-    {
-      return ((red   == otherColor.red)   and
-              (green == otherColor.green) and
-              (blue  == otherColor.blue)  and
-              (white == otherColor.white));
-    }
-  }; 
+  struct ModeDriver
+  { }; 
 }
+
