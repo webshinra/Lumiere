@@ -26,10 +26,11 @@
 
 //#include "solar.hpp"
 
+/// singleton?
+RTC_DS3231 rtc;
+
 #include "ModeDriver.hpp"
 #include "modes.hpp"
-
-RTC_DS3231 rtc;
 
 void
 setup()
@@ -88,15 +89,13 @@ loop()
       
   Lumiere::ModeDriver<Ceiling, Wall> m(&ceiling, &wall); 
 
-  m.ceiling = Lumiere::Mode::torche;
-  m.wall = Lumiere::Mode::torche;
+  m.ceiling = Lumiere::Mode::grow_cycle ;
+  m.wall =    Lumiere::Mode::grow_cycle;
   
   while(true)
     m.sync(); 
   
-  /*DateTime now = rtc.now();
-        auto t = now.unixtime();
-          Serial.print(static_cast<double>(t));
+  /*      Serial.print(static_cast<double>(t));
           Serial.print(" ");*/
         //Serial.println(solar_elevation(static_cast<double>(t),
         //48.564396,

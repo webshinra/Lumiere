@@ -48,9 +48,23 @@ namespace Lumiere
           channel->setColor({0,0,0,0});
           
           break;
+          
         case Mode::torche:
-          torche(Variant{}, channel); 
-        } 
+          torche(Variant{}, channel);
+          break;
+        case Mode::bleu_rouge:
+          bleu_rouge(Variant{}, channel); 
+          break;
+
+        case Mode::moving_bleu_rouge:
+          moving_bleu_rouge(Variant{}, channel);
+          delay(10);
+          break;
+
+        case Mode::grow_cycle:
+          grow_cycle(Variant{}, channel);
+          break; 
+        }
     }
     
     void
