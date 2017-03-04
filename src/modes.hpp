@@ -19,53 +19,57 @@
 
 namespace Lumiere
 {
-
+  enum class Mode
+    {off, torche};
+  
   struct CeilingVariant { };
   struct WallVariant { };
 
+  
+  
 
-  template <typename ChannelType>
-  void
-  torche(float greenDivisor,
-         ChannelType* channel)
-  {
-    channel->setTarget
-    (Lumiere::Color
-       {static_cast<float>(random(7, 10))/10.0,
-          static_cast<float>(random(1, 5))/greenDivisor,
-          0,
-          static_cast<float>(random(1, 5))/200.0},
-     random(35,200));
-      
-  while(!channel->interpolationConverged())
+    template <typename ChannelType>
+    void
+    torche(float greenDivisor,
+           ChannelType* channel)
       {
-        delay(10); 
-        channel->sync(10);
+      channel->setTarget
+      (Lumiere::Color
+      {static_cast<float>(random(7, 10))/10.0,
+      static_cast<float>(random(1, 5))/greenDivisor,
+      0,
+      static_cast<float>(random(1, 5))/200.0},
+      random(35,200));
+      
+      while(!channel->interpolationConverged())
+      {
+      delay(10); 
+      channel->sync(10);
       }
-  }
+      }
   
-template <typename ChannelType>
-void
-torche(CeilingVariant,
-       ChannelType* channel)
-{ torche(300.0, channel);}
+      template <typename ChannelType>
+      void
+      torche(CeilingVariant,
+      ChannelType* channel)
+      { torche(300.0, channel);}
 
-  template <typename ChannelType>
-void
-torche(WallVariant,
-       ChannelType* channel)
-  { torche(75.0, channel); }
+      template <typename ChannelType>
+      void
+      torche(WallVariant,
+      ChannelType* channel)
+      { torche(75.0, channel); }
   
   template <typename ChannelType>
   void
-         stromboscope(ChannelType* channel)
-         {
-           channel->setOutPower(1000);
+  stromboscope(ChannelType* channel)
+  {
+    channel->setOutPower(1000);
 
-           delay(30);
+    delay(30);
 
-           channel->setOutPower(0);
+    channel->setOutPower(0);
     
-           delay(100);
-         }
+    delay(100);
+  }
 }

@@ -17,9 +17,55 @@
 
 #pragma once
 
+#include "modes.hpp"
+
+#include <functional>
+
 namespace Lumiere
 {
+  // should be metaprogrammed to allow arbitrary channels variant.
+  template <typename CeilingChannelType,
+            typename WallChannelType>
   struct ModeDriver
-  { }; 
+  { 
+    
+    ModeDriver(CeilingChannelType *ceilingChannel,
+               WallChannelType *wallChannel):
+      ceiling(Mode::off),
+      wall(Mode::off),
+      mCeilingChannel(ceilingChannel),
+      mWallChannel(wallChannel)
+    { }
+
+    template <typename Variant,
+              typename ChannelType>
+    void
+    dispatch(Mode mode, ChannelType *channel)
+    {
+      switch(mode)
+        {
+        case Mode::off:
+          channel->setColor({0,0,0,0});
+          
+          break;
+        case Mode::torche:
+          torche(Variant{}, channel); 
+        } 
+    }
+    
+    void
+    sync()
+    {
+      dispatch<CeilingVariant>(ceiling, mCeilingChannel);
+      dispatch<WallVariant>(wall, mWallChannel); 
+    }
+    
+    Mode ceiling;
+    Mode wall; 
+    
+  private:
+    CeilingChannelType* mCeilingChannel;
+    WallChannelType* mWallChannel; 
+  }; 
 }
 

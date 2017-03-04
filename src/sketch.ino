@@ -26,6 +26,7 @@
 
 //#include "solar.hpp"
 
+#include "ModeDriver.hpp"
 #include "modes.hpp"
 
 RTC_DS3231 rtc;
@@ -69,28 +70,32 @@ loop()
   //blueCeilingChannel.setOutPower(10);
   //redCeilingChannel.setOutPower(10);
   //greenCeilingChannel.setOutPower(10);
-  Lumiere::RVBWChannelDriver<Lumiere::LightChannel<2,  1000>,
-                             Lumiere::LightChannel<3,  1000>,
-                             Lumiere::LightChannel<4,  1000>,
-                             Lumiere::LightChannel<5,  1000>> wall;
-  
-  Lumiere::RVBWChannelDriver<Lumiere::LightChannel<10, 1000>,
-                             Lumiere::LightChannel<8,  1000>,
-                             Lumiere::LightChannel<9,  1000>,
-                             Lumiere::LightChannel<6,  1000>> ceiling; 
+  using Wall = Lumiere::RVBWChannelDriver<Lumiere::LightChannel<2,  1000>,
+                                          Lumiere::LightChannel<3,  1000>,
+                                          Lumiere::LightChannel<4,  1000>,
+                                          Lumiere::LightChannel<5,  1000>>;
+
+  using Ceiling = Lumiere::RVBWChannelDriver<Lumiere::LightChannel<10, 1000>,
+                                             Lumiere::LightChannel<8,  1000>,
+                                             Lumiere::LightChannel<9,  1000>,
+                                             Lumiere::LightChannel<6,  1000>>;
+  Wall wall; 
+  Ceiling ceiling;
   
   //growWallChannel.setOutPower(1000);
   //whiteCeilingChannel.setOutPower(1000);
   randomSeed(43);
       
+  Lumiere::ModeDriver<Ceiling, Wall> m(&ceiling, &wall); 
+
+  m.ceiling = Lumiere::Mode::torche;
+  m.wall = Lumiere::Mode::torche;
+  
   while(true)
-    {
-      torche(Lumiere::CeilingVariant{}, &ceiling);
-      torche(Lumiere::WallVariant{}, &wall);
-    }
+    m.sync(); 
   
   /*DateTime now = rtc.now();
-    auto t = now.unixtime();
+        auto t = now.unixtime();
           Serial.print(static_cast<double>(t));
           Serial.print(" ");*/
         //Serial.println(solar_elevation(static_cast<double>(t),
