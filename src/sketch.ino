@@ -71,15 +71,17 @@ loop()
   //blueCeilingChannel.setOutPower(10);
   //redCeilingChannel.setOutPower(10);
   //greenCeilingChannel.setOutPower(10);
-  using Wall = Lumiere::RVBWChannelDriver<Lumiere::LightChannel<2,  1000>,
-                                          Lumiere::LightChannel<3,  1000>,
-                                          Lumiere::LightChannel<4,  1000>,
-                                          Lumiere::LightChannel<5,  1000>>;
+  using Wall
+    = Lumiere::RVBWChannelDriver<Lumiere::LightChannel<2,  1000>,
+                                 Lumiere::LightChannel<3,  1000>,
+                                 Lumiere::LightChannel<4,  1000>,
+                                 Lumiere::LightChannel<5,  1000>>;
 
-  using Ceiling = Lumiere::RVBWChannelDriver<Lumiere::LightChannel<10, 1000>,
-                                             Lumiere::LightChannel<8,  1000>,
-                                             Lumiere::LightChannel<9,  1000>,
-                                             Lumiere::LightChannel<6,  1000>>;
+  using Ceiling
+    = Lumiere::RVBWChannelDriver<Lumiere::LightChannel<10, 1000>,
+                                 Lumiere::LightChannel<8,  1000>,
+                                 Lumiere::LightChannel<9,  1000>,
+                                 Lumiere::LightChannel<6,  1000>>;
   Wall wall; 
   Ceiling ceiling;
   
@@ -89,15 +91,9 @@ loop()
       
   Lumiere::ModeDriver<Ceiling, Wall> m(&ceiling, &wall); 
 
-  m.ceiling = Lumiere::Mode::grow_cycle ;
+  m.ceiling = Lumiere::Mode::daylight;
   m.wall =    Lumiere::Mode::grow_cycle;
   
   while(true)
-    m.sync(); 
-  
-  /*      Serial.print(static_cast<double>(t));
-          Serial.print(" ");*/
-        //Serial.println(solar_elevation(static_cast<double>(t),
-        //48.564396,
-        //2.6063036))
+    m.sync();
 }

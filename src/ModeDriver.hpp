@@ -46,7 +46,6 @@ namespace Lumiere
         {
         case Mode::off:
           channel->setColor({0,0,0,0});
-          
           break;
           
         case Mode::torche:
@@ -57,13 +56,16 @@ namespace Lumiere
           break;
 
         case Mode::moving_bleu_rouge:
-          moving_bleu_rouge(Variant{}, channel);
-          delay(10);
+          moving_bleu_rouge(Variant{}, channel); 
           break;
 
         case Mode::grow_cycle:
           grow_cycle(Variant{}, channel);
-          break; 
+          break;
+          
+        case Mode::daylight:
+          daylight(Variant{}, channel);
+          break;
         }
     }
     

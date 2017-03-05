@@ -16,18 +16,30 @@
 */
 
 #pragma once
+#undef abs
+#include <map>
 
+#include "Color.hpp"
 namespace Lumiere
 {
   enum class Mode
     {off,
      torche,
      bleu_rouge, moving_bleu_rouge,
-     grow_cycle};
-  
+     grow_cycle, daylight};
+
+
   struct CeilingVariant { };
   struct WallVariant { };
 
+  enum class Daytime
+    {twilight =  7 * 60,
+     morning  =  8 * 60,
+     midday   = 12 * 60,
+     noon     = 18 * 60,
+     night    = 21 * 60,
+     midnight = 24 * 60};
+  
   template <typename ChannelType>
   void
   torche(float greenDivisor,
@@ -58,7 +70,7 @@ namespace Lumiere
   void
   torche(WallVariant,
          ChannelType* channel)
-  { torche(25.0, channel); }
+  { torche(50.0, channel); }
   
   template <typename ChannelType>
   void
@@ -112,16 +124,19 @@ namespace Lumiere
         constexpr int switchTime = 1000*10; 
         if(even xor variant) 
           {
+            channel->setColor({1,0,0,0}); 
             channel->setTarget({1,0,0,0}, switchTime);
             even = !even;
           } 
         else
           {
+            channel->setColor({0,0,1,0}); 
             channel->setTarget({0,0,1,0}, switchTime);
             even = !even; 
           } 
       } 
     channel->sync(10);
+    delay(10); 
   }
 
   template <typename Variant,
@@ -135,17 +150,70 @@ namespace Lumiere
       = (now.hour() * 60)
       + now.minute();
     
-    constexpr int nightBegining = 19 * 60;
-    constexpr int nightEnd      = 07 * 60;
-
-    bool night = ((time > nightBegining) and (time <= nightEnd));
-    
-    if(night)
-      channel->setColor({0,0,0,0});
+    if((   now.hour() <= 12 and time < (long)Daytime::morning)
+       or (now.hour() >  12 and time > (long)Daytime::night))
+      { channel->setColor({0, 0.1, 0,0}); } 
     else
-      channel->setColor({0,0,0,1});
-    
+      { channel->setColor({0, 0, 0, 1}); }
   }
-  
+
+  template <typename Variant,
+            typename ChannelType>
+  void
+  daylight(Variant, ChannelType* channel)
+  {
+    std::map<Daytime, Color> daymap;
+
+    daymap[Daytime::twilight] = {0.847058823529,
+                                 0.749019607843,
+                                 0.721568627451,
+                                 0}; 
+    daymap[Daytime::morning] =  {0, 0, 0.1, 1};
+    daymap[Daytime::midday] =   {0, 0, 0.3, 1};
+    daymap[Daytime::noon] =     {1.000,
+                                 0.517,
+                                 0.0588,
+                                 0};
+    daymap[Daytime::night] =    {0,
+                                 0,
+                                 0.1,
+                                 0};
+    daymap[Daytime::midnight] = {0,0,0.1 ,0};
+    
+    DateTime now = rtc.now();
+
+    const int time
+      = (now.hour() * 60)
+      + now.minute();
+
+    delay(10); 
+    channel->sync(10);
+    
+    if(channel->interpolationConverged())
+              { 
+        if(now.hour() <= 12)
+          {
+            if(time < (long)Daytime::twilight) 
+              channel->setTarget(daymap[Daytime::twilight],
+                                 ((long)Daytime::twilight-time)*1000*60);
+            else if(time < (long)Daytime::morning) 
+              channel->setTarget(daymap[Daytime::morning],
+                                 ((long)Daytime::morning-time)*1000*60);
+            else
+              channel->setTarget(daymap[Daytime::midday],
+                                 ((long)Daytime::midday-time)*1000*60);
+          }
+        else
+          {
+            if(time < (long)Daytime::noon) 
+              channel->setTarget(daymap[Daytime::noon],
+                                 ((long)Daytime::noon-time)*1000*60);
+            else
+              channel->setTarget(daymap[Daytime::night],
+                                 ((long)Daytime::night-time)*1000*60);
+          }
+      }
+    
+  } 
 }
 
